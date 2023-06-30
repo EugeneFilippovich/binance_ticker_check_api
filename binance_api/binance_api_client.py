@@ -21,10 +21,17 @@ class BinanceApiClient:
         price_change_percentage = float(response["priceChangePercent"])
         return price_change_percentage
 
-    def get_all_tickers(self) -> Dict[str, float]:
+    def get_all_tickers(self, write_to_file: bool = True, file_path: str = None) -> Dict[str, float]:
         url = f"{self.base_url}/ticker/price"
         response = self._get(url)
         tickers = {ticker["symbol"]: float(ticker["price"]) for ticker in response}
+        print(tickers)
+        if write_to_file:
+            if not file_path:
+                file_path = "tickers.txt"
+            with open(file_path, "w") as file:
+                for symbol, price in tickers.items():
+                    file.write(f"{symbol}: {price}\n")
         return tickers
 
     @staticmethod
