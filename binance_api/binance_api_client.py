@@ -1,3 +1,5 @@
+import os
+
 import requests
 from typing import (
     Dict,
@@ -27,7 +29,7 @@ class BinanceApiClient:
         tickers = {ticker["symbol"]: float(ticker["price"]) for ticker in response}
         print(tickers)
         if write_to_file:
-            if not file_path:
+            if not file_path and not os.path.exists(file_path):
                 file_path = "tickers.txt"
             with open(file_path, "w") as file:
                 for symbol, price in tickers.items():
